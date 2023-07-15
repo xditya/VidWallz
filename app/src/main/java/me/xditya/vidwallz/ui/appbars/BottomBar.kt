@@ -34,9 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import androidx.navigation.NavController
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.IOException
 
 @Composable
@@ -60,16 +57,17 @@ fun BottomBar(
     val ctxW = LocalContext.current as ComponentActivity
     val launcherW = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted ->
-            if (isGranted) {
-                // do nothing
-            }
-        }
+        onResult = {}
     )
+
+    val currentNavDest = navController.currentDestination?.route
+
     BottomAppBar(
         actions = {
             IconButton(onClick = {
-                navController.navigate("home")
+                if (currentNavDest != "home") {
+                    navController.navigate("home")
+                }
             }) {
                 Icon(
                     Icons.Sharp.Home,
